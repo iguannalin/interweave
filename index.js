@@ -5,6 +5,7 @@ window.addEventListener("load", () => {
   const h = window.innerHeight - hOffset;
   const wHalf = (w/2);
   const hHalf = (h/2);
+
   function getRandomInt(min, max) {
     min = Math.ceil(min);
     max = Math.floor(max);
@@ -12,14 +13,22 @@ window.addEventListener("load", () => {
   }
   
   const container = document.getElementById("container");
-  const maker = document.getElementById("maker");
   const table = document.getElementById("table");
   const alphabet = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"];
   
   const tb = table.getBoundingClientRect();
-  console.log(tb);
   const tW = tb.width/2;
   const tH = tb.height/2;
+
+  function display(ch) {
+    const span = document.createElement("button");
+    span.classList = "bit";
+    span.innerText = ch;
+    span.style.left = `${getRandomInt(wOffset,w)}px`;
+    span.style.top = `${getRandomInt(hHalf+(h/10),h)}px`;
+    addDrag(span);
+    container.appendChild(span);
+  }
 
   const cells = Array.from(table.querySelectorAll("td"));
   function handleDrag(e, elem) {
@@ -28,36 +37,20 @@ window.addEventListener("load", () => {
     if (x < 0 || x > tb.width || y < 0 || y > tb.height) return;
     if (container.contains(elem)) container.removeChild(elem);
     else return;
+    let cell;
     if (x < tW && y < tH) {
-      cells[0].innerHTML = elem.innerText;
-      console.log("top left");
+      cell = cells[0];
     } else if (x > tW && y < tH) {
-      cells[1].innerHTML = elem.innerText;
-      console.log("top right");
+      cell = cells[1];
     } else if (x <= tW && y >= tH) {
-      cells[2].innerHTML = elem.innerText;
-      console.log("bottom left");
+      cell = cells[2];
     } else if (x >= tW && y >= tH) {
-      cells[3].innerHTML = elem.innerText;
-      console.log("bottom right");
+      cell = cells[3];
     }
+    if (!cell) return;
+    cell.innerHTML = elem.innerText;
+    cell.style.transform = `scale(${getRandomInt(5,15)/10},${getRandomInt(10,13)/10})`;
   }
-
-  function display(ch) {
-    // if (Math.random() > 0.5) return; // only show some
-    const span = document.createElement("button");
-    span.classList = "bit";
-    span.innerText = ch;
-    span.style.left = `${getRandomInt(wOffset,w)}px`;
-    span.style.top = `${getRandomInt(hHalf+(h/6),h)}px`;
-    addDrag(span);
-    container.appendChild(span);
-  }
-
-  fetch("https://annaylin.com/100-days/sunmoonsky/radicals.json").then((r) => r.json()).then((d) => {
-    Array.from(d).forEach((radical) => display(radical));
-    alphabet.forEach((letter) => display(letter));
-  });
 
   // code from https://codepen.io/deepakkadarivel/pen/LrGEdL
   function addDrag(box) {
@@ -81,4 +74,9 @@ window.addEventListener("load", () => {
     });
     box.addEventListener('touchmove', () => onMove(e, true));
   }
+
+  fetch("https://annaylin.com/100-days/sunmoonsky/radicals.json").then((r) => r.json()).then((d) => {
+    Array.from(d).forEach((radical) => display(radical));
+    alphabet.forEach((letter) => display(letter));
+  });
 });
