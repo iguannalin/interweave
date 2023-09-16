@@ -26,6 +26,8 @@ window.addEventListener("load", () => {
     var x = e.clientX - tb.left;
     var y = e.clientY - tb.top;
     if (x < 0 || x > tb.width || y < 0 || y > tb.height) return;
+    if (container.contains(elem)) container.removeChild(elem);
+    else return;
     if (x < tW && y < tH) {
       cells[0].innerHTML = elem.innerText;
       console.log("top left");
@@ -39,8 +41,6 @@ window.addEventListener("load", () => {
       cells[3].innerHTML = elem.innerText;
       console.log("bottom right");
     }
-    // container.removeChild(elem);
-    console.log({x: x, y: y});
   }
 
   function display(ch) {
