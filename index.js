@@ -17,25 +17,31 @@ window.addEventListener("load", () => {
   const alphabet = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"];
   
   const tb = table.getBoundingClientRect();
+  console.log(tb);
   const tW = tb.width/2;
   const tH = tb.height/2;
-  function handleDrag(e) {
-    var bounds = e.target.getBoundingClientRect();
-    var x = e.clientX - bounds.left;
-    var y = e.clientY - bounds.top;
+
+  const cells = Array.from(table.querySelectorAll("td"));
+  function handleDrag(e, elem) {
+    var x = e.clientX - tb.left;
+    var y = e.clientY - tb.top;
+    if (x < 0 || x > tb.width || y < 0 || y > tb.height) return;
     if (x < tW && y < tH) {
+      cells[0].innerHTML = elem.innerText;
       console.log("top left");
     } else if (x > tW && y < tH) {
+      cells[1].innerHTML = elem.innerText;
       console.log("top right");
     } else if (x <= tW && y >= tH) {
+      cells[2].innerHTML = elem.innerText;
       console.log("bottom left");
     } else if (x >= tW && y >= tH) {
+      cells[3].innerHTML = elem.innerText;
       console.log("bottom right");
-    } 
+    }
+    // container.removeChild(elem);
     console.log({x: x, y: y});
   }
-
-  table.addEventListener("mouseenter", handleDrag);
 
   function display(ch) {
     // if (Math.random() > 0.5) return; // only show some
@@ -48,7 +54,7 @@ window.addEventListener("load", () => {
     container.appendChild(span);
   }
 
-  fetch("radicals.json").then((r) => r.json()).then((d) => {
+  fetch("https://annaylin.com/100-days/sunmoonsky/radicals.json").then((r) => r.json()).then((d) => {
     Array.from(d).forEach((radical) => display(radical));
     alphabet.forEach((letter) => display(letter));
   });
@@ -57,6 +63,7 @@ window.addEventListener("load", () => {
   function addDrag(box) {
     function onMove(e, isMobile = false) {
         e.preventDefault();
+        handleDrag(e, box);
         if (isMobile) {
           var touchLocation = e.targetTouches[0];
           box.style.left = touchLocation.pageX - 10 + 'px';
