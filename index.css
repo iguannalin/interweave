@@ -1,0 +1,65 @@
+/* @import url(small.css) (min-width:0px);
+@import url(large.css) (min-width:900px); */
+
+:root {
+  --main-bg-color: rgb(35, 35, 35);
+  --main-text-color: #f9faffde;
+  --shadow-color: #858ebc;
+}
+
+html {
+  display: block;
+  width: 100%;
+}
+
+body {
+  display: flex;
+  align-items: center;
+  flex-flow: column;
+  height: 100vh;
+  background-color: var(--main-bg-color);
+  color: var(--main-text-color);
+  text-shadow: var(--shadow-color) -2px 2px 8px;
+  font-family: sans-serif, "helvetica";
+  text-transform: capitalize;
+  margin: 0 auto;
+  cursor: pointer;
+}
+
+#maker {
+  background-color: #e5e6cbf5;
+  box-sizing: border-box;
+  margin-top: 25vh;
+  width: 100px;
+  height: 100px;
+  border: 2px red dashed;
+}
+
+table {
+  margin-top: 25vh;
+  background-color: #e5e6cbf5;
+  border-collapse: collapse;
+}
+
+tr {
+}
+
+td {
+  border: 2px red dashed;
+  box-sizing: border-box;
+  width: 40px;
+  height: 40px;
+}
+
+td:after{
+  content: "";
+  position: absolute;
+  border-top: 1px dashed red;
+  width: 40px;
+  transform: rotate(45deg);
+  transform-origin: 45% 0%;
+}
+
+button {
+  position: absolute;
+}
