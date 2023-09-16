@@ -31,9 +31,15 @@ window.addEventListener("load", () => {
   }
 
   const cells = Array.from(table.querySelectorAll("td"));
-  function handleDrag(e, elem) {
-    var x = e.clientX - tb.left;
-    var y = e.clientY - tb.top;
+  function handleDrag(e, elem, isMobile = false) {
+    let x, y;
+    if (isMobile) { 
+      x = e.targetTouches[0].clientX - tb.left;
+      y = e.targetTouches[0].clientY - tb.top;
+    } else {
+      x = e.clientX - tb.left;
+      y = e.clientY - tb.top;
+    }
     if (x < 0 || x > tb.width || y < 0 || y > tb.height) return;
     if (container.contains(elem)) container.removeChild(elem);
     else return;
@@ -56,7 +62,7 @@ window.addEventListener("load", () => {
   function addDrag(box) {
     function onMove(e, isMobile = false) {
         e.preventDefault();
-        handleDrag(e, box);
+        handleDrag(e, box, isMobile);
         if (isMobile) {
           var touchLocation = e.targetTouches[0];
           box.style.left = touchLocation.pageX - 10 + 'px';
@@ -72,7 +78,7 @@ window.addEventListener("load", () => {
     document.addEventListener('mouseup', function(e) {
       document.removeEventListener('mousemove', onMove);
     });
-    box.addEventListener('touchmove', () => onMove(e, true));
+    box.addEventListener('touchmove', (e) => onMove(e, true));
   }
 
   fetch("https://annaylin.com/100-days/sunmoonsky/radicals.json").then((r) => r.json()).then((d) => {
